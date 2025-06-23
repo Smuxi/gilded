@@ -1,0 +1,4 @@
+<modules>
+    <module>java</module>
+    <module>java-cucumber</module>
+</modules>
