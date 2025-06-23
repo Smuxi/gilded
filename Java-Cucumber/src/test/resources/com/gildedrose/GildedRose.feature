@@ -1,11 +1,6 @@
 Feature: Gilded Rose quality
   I want to know if the quality is updated properly
 
-  Scenario: Checking foo
-    Given The item as "fixme"
-    When I update the quality
-    Then I should get item as "foo"
-
   Scenario: Normal item before sell date
     Given An item named "foo" with sellIn 10 and quality 20
     When I update the quality
@@ -65,3 +60,23 @@ Feature: Gilded Rose quality
     Given An item named "Backstage passes to a TAFKAL80ETC concert" with sellIn 5 and quality 50
     When I update the quality
     Then The item should have sellIn 4 and quality 50
+
+  Scenario: Conjured item before sell date
+    Given An item named "Conjured" with sellIn 10 and quality 20
+    When I update the quality
+    Then The item should have sellIn 9 and quality 18
+
+  Scenario: Conjured item on sell date
+    Given An item named "Conjured" with sellIn 0 and quality 20
+    When I update the quality
+    Then The item should have sellIn -1 and quality 16
+
+  Scenario: Conjured item after sell date
+    Given An item named "Conjured" with sellIn -1 and quality 20
+    When I update the quality
+    Then The item should have sellIn -2 and quality 16
+
+  Scenario: Conjured item quality never negative
+    Given An item named "Conjured" with sellIn 5 and quality 1
+    When I update the quality
+    Then The item should have sellIn 4 and quality 0
