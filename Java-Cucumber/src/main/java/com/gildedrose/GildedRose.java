@@ -12,40 +12,49 @@ class GildedRose {
         final String AGED_BRIE = "Aged Brie";
         final String SULFURAS = "Sulfuras, Hand of Ragnaros";
 
+        int qualityChange;
+
         for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals(AGED_BRIE)
-                    && !items[i].name.equals(BACKSTAGE_PASSES)) {
-                if (items[i].quality > 0 && !items[i].name.equals(SULFURAS)) {
-                        items[i].quality--;
-                }
-            } else if (items[i].quality < 50) {
-                    items[i].quality++;
-
-                    if (items[i].name.equals(BACKSTAGE_PASSES)) {
-                        if (items[i].sellIn < 11 && items[i].quality < 50) {
-                            items[i].quality++;
-                        }
-
-                        if (items[i].sellIn < 6 && items[i].quality < 50) {
-                            items[i].quality++;
-                        }
-                    }
+            if (items[i].name.equals(SULFURAS)) {
+                continue;
             }
 
-            if (!items[i].name.equals(SULFURAS)) {
-                items[i].sellIn--;
+            if (items[i].name.equals(AGED_BRIE)) {
+                if (items[i].sellIn <= 0) {
+                    qualityChange = 2;
+                }
+                else {
+                    qualityChange = 1;
+                }
+            } else if (items[i].name.equals(BACKSTAGE_PASSES)) {
+                if (items[i].sellIn <= 0) {
+                    qualityChange = items[i].quality * -1;
+                }
+                else if (items[i].sellIn < 6) {
+                    qualityChange = 3;
+                } else if (items[i].sellIn < 11) {
+                    qualityChange = 2;
+                }
+                else {
+                    qualityChange = 1;
+                }
+            }
+            else {
+                if (items[i].sellIn <= 0) {
+                    qualityChange = -2;
+                }
+                else {
+                    qualityChange = -1;
+                }
             }
 
-            if (items[i].sellIn < 0) {
-                if (items[i].name.equals(AGED_BRIE)) {
-                    if (items[i].quality < 50) {
-                        items[i].quality++;
-                    }
-                } else if (items[i].name.equals(BACKSTAGE_PASSES)) {
-                    items[i].quality = 0;
-                } else if (items[i].quality > 0 && !items[i].name.equals(SULFURAS)) {
-                    items[i].quality--;
-                }
+            items[i].sellIn--;
+            items[i].quality += qualityChange;
+
+            if (items[i].quality < 0) {
+                items[i].quality = 0;
+            } else if (items[i].quality > 50) {
+                items[i].quality = 50;
             }
         }
     }
